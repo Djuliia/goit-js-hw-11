@@ -1,0 +1,101 @@
+.gallery-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 16px;
+  padding: 12px;
+}
+
+.photo-card {
+  flex-basis: calc((100% - 3 * 24px) / 4);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.photo-card:hover {
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-color: #cad6eb;
+}
+
+.photo {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.search-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-form input[type='text'] {
+  width: 200px;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-right: 8px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #4287f5;
+  color: #fff;
+}
+
+button:hover {
+  background-color: #3366cc;
+}
+
+button:active {
+  background-color: #2755b8;
+}
+
+.load-more {
+  margin: 0 auto;
+}
+
+input {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.info {
+  display: flex;
+}
+
+.info-item {
+  width: 36px;
+  height: 36px;
+  fill: currentColor;
+  background-color: transparent;
+}
