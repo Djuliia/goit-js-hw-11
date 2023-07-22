@@ -23,6 +23,7 @@ const options = {
 
 let page = 1;
 let searchQuery;
+let searchEnded = false;
 
 const observer = new IntersectionObserver(handlerPagination, options);
 
@@ -39,6 +40,7 @@ async function handlerPagination(entries, observer) {
         );
         gallery.refresh();
         if (page * 40 >= data.totalHits) {
+          searchEnded = true; 
           observer.unobserve(entry.target);
           Notiflix.Notify.warning(
             "We're sorry, but you've reached the end of search results."
@@ -60,9 +62,10 @@ selectors.form.addEventListener('submit', onSearch);
 
 async function onSearch(e) {
   e.preventDefault();
-
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+  selectors.galleryList.innerHTML ='';
   if (!searchQuery) {
+
     Notiflix.Notify.warning('Please fill in the field!');
     return;
   }
@@ -70,9 +73,11 @@ async function onSearch(e) {
     const data = await serviceGallery(searchQuery, (page = 1));
 
     if (data.hits.length === 0) {
+      searchEnded = true;
       Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+    
     } else {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
 
@@ -84,7 +89,7 @@ async function onSearch(e) {
 
       window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
 
-      if (page < data.totalHits) {
+      if (page < data.totalHits && !searchEnded) {
         observer.observe(selectors.guard);
       }
     }
@@ -107,50 +112,20 @@ function createMarkup(arr) {
         views,
         comments,
         downloads,
-      }) => `
+      }) => `			<a class="gallery-link" href="${largeImageURL}">
       <div class="photo-card">
-      <a class="gallery-link" href="${largeImageURL}">
         <img class="photo" src="${webformatURL}" alt="${tags}" loading="lazy" />
-      </a>
-      <div class="info">
-        <svg class="info-item">
-          <use xlink:href="./images/sprite.svg#heart"></use>
-        </svg>
-        ${likes}
-        <svg class="info-item">
-          <use xlink:href="./images/sprite.svg#eye"></use>
-        </svg> 
-        ${views}
-        <svg class="info-item">
-          <use xlink:href="./images/sprite.svg#comment"></use>
-        </svg>
-        ${comments}
-        <svg class="info-item">
-          <use xlink:href="./images/sprite.svg#download"></use>
-        </svg> 
-        ${downloads}
+        <div class="info">
+          <p class="info-item"><b>Likes</b>${likes}</p>
+          <p class="info-item"><b>Views</b>${views}</p>
+          <p class="info-item"><b>Comments</b>${comments}</p>
+          <p class="info-item"><b>Downloads</b>${downloads}</p>
+        </div>
       </div>
-    </div>
-    `
-    )
-    .join('');
+    </a>`
+  )
+  .join('');
 }
-// <div class="photo-card">
-//   <a class="gallery-link" href="${largeImageURL}">
-//     <img class="photo" src="${webformatURL}" alt="${tags}" loading="lazy" />
-//   </a>
-//   <div class="info">
-//     <p class="info-item">
-//       <b>Likes</b> ${likes}
-//     </p>
-//     <p class="info-item">
-//       <b>Views</b> ${views}
-//     </p>
-//     <p class="info-item">
-//       <b>Comments</b> ${comments}
-//     </p>
-//     <p class="info-item">
-//       <b>Downloads</b> ${downloads}
-//     </p>
-//   </div>
-// </div>
+ 
+
+
