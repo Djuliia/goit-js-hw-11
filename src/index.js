@@ -40,7 +40,7 @@ async function handlerPagination(entries, observer) {
         );
         gallery.refresh();
         if (page * 40 >= data.totalHits) {
-          searchEnded = true; 
+          searchEnded = true;
           observer.unobserve(entry.target);
           Notiflix.Notify.warning(
             "We're sorry, but you've reached the end of search results."
@@ -63,9 +63,8 @@ selectors.form.addEventListener('submit', onSearch);
 async function onSearch(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-  selectors.galleryList.innerHTML ='';
+  selectors.galleryList.innerHTML = '';
   if (!searchQuery) {
-
     Notiflix.Notify.warning('Please fill in the field!');
     return;
   }
@@ -77,10 +76,8 @@ async function onSearch(e) {
       Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-    
     } else {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-
       selectors.galleryList.innerHTML = createMarkup(data.hits);
       gallery.refresh();
 
@@ -112,7 +109,7 @@ function createMarkup(arr) {
         views,
         comments,
         downloads,
-      }) => `			<a class="gallery-link" href="${largeImageURL}">
+      }) => `<a class="gallery-link" href="${largeImageURL}">
       <div class="photo-card">
         <img class="photo" src="${webformatURL}" alt="${tags}" loading="lazy" />
         <div class="info">
@@ -123,9 +120,6 @@ function createMarkup(arr) {
         </div>
       </div>
     </a>`
-  )
-  .join('');
+    )
+    .join('');
 }
- 
-
-
