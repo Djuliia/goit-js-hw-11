@@ -23,7 +23,7 @@ const options = {
 
 let page = 1;
 let searchQuery;
-let searchEnded = false;
+
 
 const observer = new IntersectionObserver(handlerPagination, options);
 
@@ -39,19 +39,18 @@ async function handlerPagination(entries, observer) {
           createMarkup(data.hits)
         );
         gallery.refresh();
-        if (page * 40 >= data.totalHits) {
-          searchEnded = true;
-          observer.unobserve(entry.target);
+
+              const cardHeight =
+        selectors.galleryList.firstElementChild.getBoundingClientRect().height;
+
+      window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
+        if (data.hits.length > 0 && page * 40 >= data.totalHits) {      
           Notiflix.Notify.warning(
             "We're sorry, but you've reached the end of search results."
           );
-        }
-        const cardHeight =
-          selectors.galleryList.firstElementChild.getBoundingClientRect()
-            .height;
-
-        window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
-      } catch (err) {
+           observer.unobserve(entry.target);
+        } 
+    } catch (err) {
         console.log(err);
       }
     }
@@ -63,7 +62,7 @@ selectors.form.addEventListener('submit', onSearch);
 async function onSearch(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-  selectors.galleryList.innerHTML = '';
+   selectors.galleryList.innerHTML = '';
   if (!searchQuery) {
     Notiflix.Notify.warning('Please fill in the field!');
     return;
@@ -72,22 +71,18 @@ async function onSearch(e) {
     const data = await serviceGallery(searchQuery, (page = 1));
 
     if (data.hits.length === 0) {
-      searchEnded = true;
+
       Notiflix.Notify.warning(
         'Sorry, there are no images matching your search query. Please try again.'
-      );
+      ); 
     } else {
       Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
       selectors.galleryList.innerHTML = createMarkup(data.hits);
       gallery.refresh();
-
-      const cardHeight =
-        selectors.galleryList.firstElementChild.getBoundingClientRect().height;
-
-      window.scrollBy({ top: cardHeight * 2, behavior: 'smooth' });
-
-      if (page < data.totalHits && !searchEnded) {
+     
+      if (page < data.totalHits) {
         observer.observe(selectors.guard);
+       
       }
     }
   } catch (error) {
